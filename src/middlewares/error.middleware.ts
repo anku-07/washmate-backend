@@ -1,4 +1,5 @@
 import type { ErrorRequestHandler, RequestHandler } from "express";
+import { ZodError } from "zod";
 
 import { AppError } from "../utils/app-error.js";
 
@@ -22,9 +23,24 @@ export const errorHandler: ErrorRequestHandler = (
     return;
   }
 
-  const isOperationalError = error instanceof AppError;
-  const statusCode = isOperationalError ? error.statusCode : 500;
-  const message = isOperationalError ? error.message : "Something went wrong";
+  let statusCode = 500;
+  let message = "Something went wrong";
+
+  if (error instanceof AppError) {
+    statusCode = error.statusCode;
+    message = error.message;
+  } else if (error instanceof ZodError) {
+    statusCode = 400;
+    message = error.issues[0]?.message ?? "Invalid request data";
+  } else if (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === 11_000
+  ) {
+    statusCode = 409;
+    message = "An account with those details already exists";
+  }
 
   console.error(error);
   response.status(statusCode).json({
