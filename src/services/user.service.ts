@@ -25,7 +25,7 @@ export const updateUserProfile = async (
   const user = await User.findByIdAndUpdate(
     userId,
     { $set: input },
-    { new: true, runValidators: true },
+    { returnDocument: "after", runValidators: true },
   );
 
   if (!user) {

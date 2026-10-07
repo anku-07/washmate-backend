@@ -6,3 +6,9 @@ export const validateBody = (schema: ZodType): RequestHandler =>
     request.body = schema.parse(request.body);
     next();
   };
+
+export const validateParams = (schema: ZodType): RequestHandler =>
+  (request, _response, next) => {
+    schema.parse(request.params);
+    next();
+  };

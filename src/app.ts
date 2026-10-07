@@ -9,6 +9,7 @@ import { requestLogger } from "./middlewares/logger.middleware.js";
 import authRouter from "./routes/auth.routes.js";
 import healthRouter from "./routes/health.routes.js";
 import userRouter from "./routes/user.routes.js";
+import vehicleRouter from "./routes/vehicle.routes.js";
 
 const app = express();
 
@@ -37,6 +38,7 @@ if (env.NODE_ENV === "development") {
 app.use("/api/v1", healthRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/vehicles", vehicleRouter);
 
 // Error handling must be registered after all routes.
 app.use(notFoundHandler);

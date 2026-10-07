@@ -39,10 +39,13 @@ export const errorHandler: ErrorRequestHandler = (
     error.code === 11_000
   ) {
     statusCode = 409;
-    message = "An account with those details already exists";
+    message = "A resource with those details already exists";
   }
 
-  console.error(error);
+  if (statusCode >= 500) {
+    console.error(error);
+  }
+
   response.status(statusCode).json({
     success: false,
     message,
