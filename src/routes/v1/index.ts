@@ -1,12 +1,12 @@
 import { Router } from "express";
 
-const router = Router();
+const v1Router = Router();
 
-router.get("/health", (_request, response) => {
+v1Router.get("/health", (_request, response) => {
   response.status(200).json({
     success: true,
     message: "WashMate API is healthy",
   });
 });
 
-export default router;
+export default v1Router;

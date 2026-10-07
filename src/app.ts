@@ -4,7 +4,7 @@ import helmet from "helmet";
 
 import { errorHandler, notFoundHandler } from "./middlewares/error.middleware.js";
 import { requestLogger } from "./middlewares/logger.middleware.js";
-import router from "./routes/index.js";
+import v1Router from "./routes/v1/index.js";
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.use(express.json({ limit: "10kb" }));
 app.use(requestLogger);
 
 // Routes
-app.use("/api", router);
+app.use("/api/v1", v1Router);
 
 // Error handling must be registered after all routes.
 app.use(notFoundHandler);
