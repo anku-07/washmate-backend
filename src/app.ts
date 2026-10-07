@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 
+import { env } from "./config/env.js";
 import { errorHandler, notFoundHandler } from "./middlewares/error.middleware.js";
 import { requestLogger } from "./middlewares/logger.middleware.js";
 import v1Router from "./routes/v1/index.js";
@@ -13,13 +14,19 @@ app.disable("x-powered-by");
 app.use(helmet());
 
 // CORS
-app.use(cors());
+app.use(
+  cors({
+    origin: env.FRONTEND_URL,
+  }),
+);
 
 // Body parsing
-app.use(express.json({ limit: "10kb" }));
+app.use(express.json({ limit: "1mb" }));
 
 // Logging
-app.use(requestLogger);
+if (env.NODE_ENV === "development") {
+  app.use(requestLogger);
+}
 
 // Routes
 app.use("/api/v1", v1Router);
